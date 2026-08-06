@@ -1,0 +1,5 @@
+allowBuilds:
+  bcrypt: false
+  msgpackr-extract: false
+minimumReleaseAgeExclude:
+  - bullmq@6.0.8
