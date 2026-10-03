@@ -1,0 +1,804 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"Show": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"hall": {
+						"type": "string"
+					},
+					"showTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"seats": {
+						"items": {
+							"$ref": "#/components/schemas/Seat"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"title",
+					"hall",
+					"showTime",
+					"createdAt",
+					"updatedAt",
+					"seats"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReservationStatus": {
+				"enum": [
+					"HELD",
+					"CONFIRMED",
+					"EXPIRED",
+					"CANCELLED"
+				],
+				"type": "string"
+			},
+			"UserRole": {
+				"enum": [
+					"USER",
+					"ADMIN"
+				],
+				"type": "string"
+			},
+			"Reservation": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"userId": {
+						"type": "string"
+					},
+					"status": {
+						"$ref": "#/components/schemas/ReservationStatus"
+					},
+					"expiresAt": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"user": {
+						"$ref": "#/components/schemas/User"
+					},
+					"seats": {
+						"items": {
+							"$ref": "#/components/schemas/ReservationSeat"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"userId",
+					"status",
+					"expiresAt",
+					"createdAt",
+					"updatedAt",
+					"user",
+					"seats"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"User": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"username": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/UserRole"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"reservations": {
+						"items": {
+							"$ref": "#/components/schemas/Reservation"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"username",
+					"email",
+					"password",
+					"role",
+					"createdAt",
+					"updatedAt",
+					"reservations"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReservationSeat": {
+				"properties": {
+					"reservationId": {
+						"type": "string"
+					},
+					"seatId": {
+						"type": "string"
+					},
+					"reservation": {
+						"$ref": "#/components/schemas/Reservation"
+					},
+					"seat": {
+						"$ref": "#/components/schemas/Seat"
+					}
+				},
+				"required": [
+					"reservationId",
+					"seatId",
+					"reservation",
+					"seat"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Seat": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"showId": {
+						"type": "string"
+					},
+					"seatNumber": {
+						"type": "string"
+					},
+					"section": {
+						"type": "string",
+						"nullable": true
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"show": {
+						"$ref": "#/components/schemas/Show"
+					},
+					"reservationSeats": {
+						"items": {
+							"$ref": "#/components/schemas/ReservationSeat"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"showId",
+					"seatNumber",
+					"section",
+					"price",
+					"createdAt",
+					"updatedAt",
+					"show",
+					"reservationSeats"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateShowBody": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"hall": {
+						"type": "string"
+					},
+					"showTime": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"title",
+					"hall",
+					"showTime"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SeatBody": {
+				"properties": {
+					"seatNumber": {
+						"type": "string"
+					},
+					"section": {
+						"type": "string",
+						"nullable": true
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateSeatsBody": {
+				"properties": {
+					"seatNumber": {
+						"type": "string"
+					},
+					"section": {
+						"type": "string",
+						"nullable": true
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"seats": {
+						"items": {
+							"$ref": "#/components/schemas/SeatBody"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateReservationBody": {
+				"properties": {
+					"showId": {
+						"type": "string"
+					},
+					"seatIds": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"showId",
+					"seatIds"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"HealthResponse": {
+				"properties": {
+					"status": {
+						"type": "string",
+						"enum": [
+							"ok"
+						],
+						"nullable": false
+					},
+					"database": {
+						"type": "string",
+						"enum": [
+							"connected",
+							"not initialized"
+						]
+					}
+				},
+				"required": [
+					"status",
+					"database"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PublicUser": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"username": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/UserRole"
+					}
+				},
+				"required": [
+					"id",
+					"username",
+					"email",
+					"role"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AuthResponse": {
+				"properties": {
+					"user": {
+						"$ref": "#/components/schemas/PublicUser"
+					},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"user",
+					"token"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RegisterBody": {
+				"properties": {
+					"username": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"username",
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginBody": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"info": {
+		"title": "concurrent-booking",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"paths": {
+		"/shows": {
+			"get": {
+				"operationId": "GetShows",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Show"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Shows"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateShow",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Show"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Shows"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateShowBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/shows/{showId}/seats": {
+			"get": {
+				"operationId": "GetSeatsForShow",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Seat"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Seats"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "showId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateSeatsForShow",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Seat"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Seats"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "showId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateSeatsBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/reservations": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"seatIds": {
+											"items": {
+												"type": "string"
+											},
+											"type": "array"
+										},
+										"reservation": {
+											"$ref": "#/components/schemas/Reservation"
+										}
+									},
+									"required": [
+										"message",
+										"seatIds",
+										"reservation"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Reservations"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateReservationBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/reservations/{reservationId}/confirm": {
+			"post": {
+				"operationId": "Confirm",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"reservation": {
+											"$ref": "#/components/schemas/Reservation"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"reservation",
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Reservations"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "reservationId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/reservations/{reservationId}/cancel": {
+			"post": {
+				"operationId": "Cancel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"reservation": {
+											"$ref": "#/components/schemas/Reservation"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"reservation",
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Reservations"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "reservationId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/health": {
+			"get": {
+				"operationId": "GetHealth",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HealthResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Health"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/auth/register": {
+			"post": {
+				"operationId": "Register",
+				"responses": {
+					"201": {
+						"description": "Registered",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Authentication"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegisterBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Authentication"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginBody"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}
